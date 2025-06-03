@@ -24,6 +24,15 @@
 
   let shortcuts = JSON.parse(localStorage.getItem("shortcuts")) || [];
 
+  function togglePopup() {
+  const isVisible = popup.style.display === "flex";
+  popup.style.display = isVisible ? "none":"flex";
+  if (!isVisible) {
+    nameInput.value = "";
+    linkInput.value = "";
+  }
+}
+
   function renderShortcuts() {
     dashboard.innerHTML = "";
     shortcuts.forEach((sc, index) => {
