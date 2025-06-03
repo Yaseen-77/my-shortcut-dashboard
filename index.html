@@ -17,53 +17,61 @@
   </div>
 
   <script>
-    const dashboard = document.getElementById("dashboard");
-    const popup = document.getElementById("popup");
+  const dashboard = document.getElementById("dashboard");
+  const popup = document.getElementById("popup");
+  const nameInput = document.getElementById("name");
+  const linkInput = document.getElementById("link");
 
-    let shortcuts = JSON.parse(localStorage.getItem("shortcuts")) || [];
+  let shortcuts = JSON.parse(localStorage.getItem("shortcuts")) || [];
 
-    function renderShortcuts() {
-      dashboard.innerHTML = "";
-      shortcuts.forEach((sc, index) => {
-        const div = document.createElement("div");
-        div.className = "shortcut";
-        div.innerHTML = `
-          <button class="remove-btn" onclick="removeShortcut(${index})">×</button>
-          <a href="${sc.link}" target="_blank">
-           <img src="https://www.google.com/s2/favicons?domain=${sc.link}&sz=128" />
-            <span>${sc.name}</span>
-          </a>
-        `;
-        dashboard.appendChild(div);
-      });
+  function renderShortcuts() {
+    dashboard.innerHTML = "";
+    shortcuts.forEach((sc, index) => {
+      const div = document.createElement("div");
+      div.className = "shortcut";
+      div.innerHTML = `
+        <button class="remove-btn" onclick="removeShortcut(${index})">×</button>
+        <a href="${sc.link}" target="_blank">
+          <img src="https://www.google.com/s2/favicons?domain=${sc.link}" alt="icon" />
+          <span>${sc.name}</span>
+        </a>
+      `;
+      dashboard.appendChild(div);
+    });
 
-      const addDiv = document.createElement("div");
-      addDiv.className = "shortcut add";
-      addDiv.innerHTML = `<div class="plus" onclick="togglePopup()">+</div><span>Add shortcut</span>`;
-      dashboard.appendChild(addDiv);
+    const addDiv = document.createElement("div");
+    addDiv.className = "shortcut add";
+    addDiv.innerHTML = `<div class="plus" onclick="togglePopup()">+</div><span>Add shortcut</span>`;
+    dashboard.appendChild(addDiv);
+  }
+
+  function togglePopup() {
+    const isVisible = popup.style.display === "flex";
+    popup.style.display = isVisible ? "none" : "flex";
+    if (!isVisible) {
+      nameInput.value = "";
+      linkInput.value = "";
     }
+  }
 
-    function togglePopup() {
-      popup.style.display = popup.style.display === "flex" ? "none" : "flex";
-    }
-
-    function addShortcut() {
-      const name = document.getElementById("name").value;
-      const link = document.getElementById("link").value;
-      if (!name || !link) return;
-      shortcuts.push({ name, link });
-      localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
-      togglePopup();
-      renderShortcuts();
-    }
-
-    function removeShortcut(index) {
-      shortcuts.splice(index, 1);
-      localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
-      renderShortcuts();
-    }
-
+  function addShortcut() {
+    const name = nameInput.value.trim();
+    const link = linkInput.value.trim();
+    if (!name || !link) return;
+    shortcuts.push({ name, link });
+    localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
+    togglePopup();
     renderShortcuts();
-  </script>
+  }
+
+  function removeShortcut(index) {
+    shortcuts.splice(index, 1);
+    localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
+    renderShortcuts();
+  }
+
+  renderShortcuts();
+</script>
+
 </body>
 </html>
