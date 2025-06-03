@@ -7,8 +7,18 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Background Upload Button -->
+  <div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
+    <label for="bgInput" style="cursor: pointer; padding: 6px 10px; background-color: rgba(255, 255, 255, 0.2); border-radius: 5px; color: white; font-size: 14px;">
+      🖼 Change Background
+    </label>
+    <input type="file" id="bgInput" accept="image/*" style="display: none;" />
+  </div>
+
+  <!-- Shortcuts Area -->
   <div class="dashboard" id="dashboard"></div>
 
+  <!-- Popup Input Box -->
   <div class="popup" id="popup">
     <input type="text" id="name" placeholder="Name" />
     <input type="text" id="link" placeholder="Website URL" />
@@ -16,91 +26,76 @@
     <button onclick="togglePopup()">Cancel</button>
   </div>
 
+  <!-- Script -->
   <script>
-  const dashboard = document.getElementById("dashboard");
-  const popup = document.getElementById("popup");
-  const nameInput = document.getElementById("name");
-  const linkInput = document.getElementById("link");
+    const dashboard = document.getElementById("dashboard");
+    const popup = document.getElementById("popup");
+    const nameInput = document.getElementById("name");
+    const linkInput = document.getElementById("link");
+    const bgInput = document.getElementById("bgInput");
 
-  let shortcuts = JSON.parse(localStorage.getItem("shortcuts")) || [];
+    let shortcuts = JSON.parse(localStorage.getItem("shortcuts")) || [];
 
-  function togglePopup() {
-  const isVisible = popup.style.display === "flex";
-  popup.style.display = isVisible ? "none":"flex";
-  if (!isVisible) {
-    nameInput.value = "";
-    linkInput.value = "";
-  }
-}
+    function togglePopup() {
+      const isVisible = popup.style.display === "flex";
+      popup.style.display = isVisible ? "none": "flex";
+      if (!isVisible) {
+        nameInput.value = "";
+        linkInput.value = "";
+      }
+    }
 
-  function renderShortcuts() {
-    dashboard.innerHTML = "";
-    shortcuts.forEach((sc, index) => {
-      const div = document.createElement("div");
-      div.className = "shortcut";
-      div.innerHTML = `
-        <button class="remove-btn" onclick="removeShortcut(${index})">×</button>
-        <a href="${sc.link}" target="_blank">
-          <img src="https://www.google.com/s2/favicons?domain=${sc.link}" alt="icon" />
-          <span>${sc.name}</span>
-        </a>
-      `;
-      dashboard.appendChild(div);
+    function renderShortcuts() {
+      dashboard.innerHTML = "";
+      shortcuts.forEach((sc, index) => {
+        const div = document.createElement("div");
+        div.className = "shortcut";
+        div.innerHTML = `
+          <button class="remove-btn" onclick="removeShortcut(${index})">×</button>
+          <a href="${sc.link}" target="_blank">
+            <img src="https://www.google.com/s2/favicons?domain=${sc.link}" alt="icon" />
+            <span>${sc.name}</span>
+          </a>
+        `;
+        dashboard.appendChild(div);
+      });
+
+      const addDiv = document.createElement("div");
+      addDiv.className = "shortcut add";
+      addDiv.innerHTML = `<div class="plus" onclick="togglePopup()">+</div><span>Add shortcut</span>`;
+      dashboard.appendChild(addDiv);
+    }
+
+    function addShortcut() {
+      const name = nameInput.value.trim();
+      const link = linkInput.value.trim();
+      if (!name || !link) return;
+      shortcuts.push({ name, link });
+      localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
+      togglePopup();
+      renderShortcuts();
+    }
+
+    function removeShortcut(index) {
+      shortcuts.splice(index, 1);
+      localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
+      renderShortcuts();
+    }
+
+    bgInput.addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        document.body.style.backgroundImage = `url('${event.target.result}')`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+      };
+      reader.readAsDataURL(file);
     });
 
-    const addDiv = document.createElement("div");
-    addDiv.className = "shortcut add";
-    addDiv.innerHTML = `<div class="plus" onclick="togglePopup()">+</div><span>Add shortcut</span>`;
-    dashboard.appendChild(addDiv);
-  }
-
-  function togglePopup() {
-    const isVisible = popup.style.display === "flex";
-    popup.style.display = isVisible ? "none" : "flex";
-    if (!isVisible) {
-      nameInput.value = "";
-      linkInput.value = "";
-    }
-  }
-
-  function addShortcut() {
-    const name = nameInput.value.trim();
-    const link = linkInput.value.trim();
-    if (!name || !link) return;
-    shortcuts.push({ name, link });
-    localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
-    togglePopup();
     renderShortcuts();
-  }
-
-  function removeShortcut(index) {
-    shortcuts.splice(index, 1);
-    localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
-    renderShortcuts();
-  }
-
-  document.getElementById("bgInput").addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function (event) {
-    document.body.style.backgroundImage = `url('${event.target.result}')`;
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-  };
-  reader.readAsDataURL(file);
-});
-
-    
-  renderShortcuts();
-</script>
-<div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
-  <label for="bgInput" style="cursor: pointer; padding: 6px 10px; background-color: rgba(255, 255, 255, 0.2); border-radius: 5px; color: white; font-size: 14px;">
-    🖼 Change Background
-  </label>
-  <input type="file" id="bgInput" accept="image/*" style="display: none;" />
-</div>
-
+  </script>
 </body>
 </html>
