@@ -1,28 +1,26 @@
-/* Reset + Base Styles */
 body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
   background: url("bg.jpg") no-repeat center center fixed;
   background-size: cover;
-  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 40px;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  height: 100vh;
+  flex-direction: column;
 }
 
-/* Dashboard container */
 .dashboard {
   display: flex;
-  gap: 20px;
+  gap: 30px;
   padding: 20px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
+  overflow-x: auto;
   width: 100%;
-  max-width: 1000px;
 }
 
-/* Shortcut card */
 .shortcut {
   background-color: #44385a;
   border-radius: 20px;
@@ -32,31 +30,28 @@ body {
   width: 80px;
   cursor: pointer;
   transition: transform 0.2s;
-  position: relative;
   flex-shrink: 0;
+  position: relative;
 }
 
 .shortcut:hover {
   transform: scale(1.1);
 }
 
-/* Shortcut icon */
 .shortcut img {
   width: 36px;
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-/* Shortcut name */
 .shortcut span {
   display: block;
   font-size: 12px;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
-/* Remove shortcut button */
 .shortcut .remove-btn {
   position: absolute;
   top: -8px;
@@ -74,7 +69,6 @@ body {
   cursor: pointer;
 }
 
-/* Add shortcut style */
 .shortcut.add {
   border: 2px solid #b893f5;
   background-color: transparent;
@@ -85,9 +79,8 @@ body {
   color: #b893f5;
 }
 
-/* Popup styles */
-.popup,
-#popup {
+.popup {
+  display: none;
   position: fixed;
   top: 20px;
   left: 50%;
@@ -96,24 +89,20 @@ body {
   padding: 20px;
   border-radius: 15px;
   z-index: 100;
-  display: none;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   gap: 10px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
 
-/* Popup inputs and buttons */
-.popup input,
-#popup input {
+.popup input {
   padding: 10px;
   width: 250px;
   border-radius: 8px;
   border: none;
 }
 
-.popup button,
-#popup button {
+.popup button {
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
@@ -123,7 +112,6 @@ body {
   margin: 5px;
 }
 
-/* Responsive adjustments */
 @media (max-width: 600px) {
   .dashboard {
     flex-wrap: wrap;
@@ -143,8 +131,11 @@ body {
     font-size: 11px;
   }
 
-  .popup input,
-  #popup input {
+  .popup input {
     width: 200px;
   }
+}
+
+* {
+  transition: all 0.2s ease-in-out;
 }
