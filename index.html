@@ -53,7 +53,7 @@
         div.innerHTML = `
           <button class="remove-btn" onclick="removeShortcut(${index})">×</button>
           <a href="${sc.link}" target="_blank">
-            <img src="https://www.google.com/s2/favicons?domain=${sc.link}" alt="icon" />
+           <img src="https://www.google.com/s2/favicons?sz=64&domain_url=${sc.link}" alt="icon" />
             <span>${sc.name}</span>
           </a>
         `;
